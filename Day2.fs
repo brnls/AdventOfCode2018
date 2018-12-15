@@ -2,7 +2,7 @@
 
 open System.IO
 
-let data = File.ReadAllLines("day2input.txt")
+let data() = File.ReadAllLines("day2input.txt")
 
 let part1() = 
     let counts (word: string) =
@@ -18,7 +18,7 @@ let part1() =
             i <- i + 1
         exactlyTwo, exactlyThree
 
-    data 
+    data ()
     |> Array.map counts
     |> Array.fold (fun (sx, sy) (x,y) ->  (if x then sx + 1 else sx), (if y then sy + 1 else sy)) (0, 0)
     |> (fun (x,y) -> x * y)
@@ -40,6 +40,7 @@ let part2() =
                 else inner (idx + 1) diffIdx
         inner 0 None
 
+    let data = data()
     Seq.allPairs data data 
     |> Seq.choose compare
     |> Seq.head 

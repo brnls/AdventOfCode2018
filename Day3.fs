@@ -1,9 +1,8 @@
-﻿open System.IO
-#I __SOURCE_DIRECTORY__
-Directory.SetCurrentDirectory(__SOURCE_DIRECTORY__)
-
+﻿module Day3
 open System
-let data = File.ReadAllLines("day3input")
+open System.IO
+
+let data() = File.ReadAllLines("day3input")
 
 type Claim = {
     id: int
@@ -25,14 +24,13 @@ let parseClaim (line: string) =
         height  = Int32.Parse(dims.[1])
     }
 
-let claims = data |> Array.map parseClaim    
-
 type ClaimStatus =
 |NotClaimed = 0
 |Claimed = 1
 |MultipleClaims = 2
 
 let part1And2 () = 
+    let claims = data() |> Array.map parseClaim    
     let iterClaim claim action = 
         for i in claim.x..(claim.x + claim.width - 1) do
             for j in claim.y..(claim.y + claim.height - 1) do
@@ -48,10 +46,7 @@ let part1And2 () =
                     |ClaimStatus.NotClaimed -> ClaimStatus.Claimed
                     |_ ->ClaimStatus.MultipleClaims
             )
-        
-
         for c in claims do markClaim c
-
         fabric
 
     let fabric  = markFabric claims        
@@ -67,13 +62,3 @@ let part1And2 () =
     fabric |> Array2D.iter(fun x -> if x = ClaimStatus.MultipleClaims then count <- count + 1)
     count, uniqueClaim.id
 
-part1And2()
-let claimsOverlap claim1 claim2 = 
-    let overlapInDim p1 p1Length p2 p2Length =
-        let p1End = p1 + p1Length    
-        let p2End = p2 + p2Length
-        (p2 >= p1 && p2 <= p1End) || (p2End >= p1 && p2 <= p1End)
-    
-    overlapInDim claim1.x claim1.width claim2.x claim2.width &&
-    overlapInDim claim1.y claim1.height claim2.y claim2.height
-claimsOverlap c1 c2

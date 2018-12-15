@@ -4,12 +4,13 @@ open System.IO
 open System.Collections.Generic
 open System
 
-let data = File.ReadAllLines("data.txt") |> Array.map Int32.Parse
+let data() = File.ReadAllLines("data.txt") |> Array.map Int32.Parse
 
-let part1() = data |> Array.sum
+let part1() = data() |> Array.sum
 
 let part2() =
     let seen = HashSet<int>()
+    let data = data()
     let runningTotal = 
         Seq.concat(Seq.initInfinite (fun _ -> data))
         |> Seq.scan (+) 0
